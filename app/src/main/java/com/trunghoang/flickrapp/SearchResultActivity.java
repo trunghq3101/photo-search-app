@@ -1,11 +1,15 @@
 package com.trunghoang.flickrapp;
 
 import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Menu;
 
 import java.util.ArrayList;
 
@@ -41,6 +45,19 @@ public class SearchResultActivity extends BaseActivity implements GetFlickrJsonD
                 "en-US",
                 true);
         getFlickrJsonData.execute(query);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        if (searchManager != null && searchView != null) {
+            SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
+            searchView.setSearchableInfo(searchableInfo);
+            searchView.setIconifiedByDefault(false);
+        }
+        return true;
     }
 
     @Override
