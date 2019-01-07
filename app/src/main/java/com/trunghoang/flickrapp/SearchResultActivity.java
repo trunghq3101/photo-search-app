@@ -5,7 +5,7 @@ import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -34,7 +34,7 @@ public class SearchResultActivity extends BaseActivity implements GetFlickrJsonD
         }
 
         RecyclerView recyclerView = findViewById(R.id.photos_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         photoListAdapter = new PhotoListAdapter(new ArrayList<Photo>());
         recyclerView.setAdapter(photoListAdapter);
         PhotoTouchListener photoTouchListener = new PhotoTouchListener(this, recyclerView, this);

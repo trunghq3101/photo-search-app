@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -21,12 +20,10 @@ class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.PhotoViewHo
 
     static class PhotoViewHolder extends RecyclerView.ViewHolder {
         private ImageView photoThumb;
-        private TextView photoTitle;
 
         PhotoViewHolder(View layout) {
             super(layout);
             photoThumb = layout.findViewById(R.id.photo_thumb);
-            photoTitle = layout.findViewById(R.id.photo_title);
         }
     }
 
@@ -50,7 +47,6 @@ class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.PhotoViewHo
         Picasso.get()
                 .load(photos.get(position).getImage())
                 .into(holder.photoThumb);
-        holder.photoTitle.setText(photos.get(position).getTitle());
     }
 
     @Override
