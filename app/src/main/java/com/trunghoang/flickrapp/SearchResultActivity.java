@@ -5,6 +5,7 @@ import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -18,6 +19,8 @@ public class SearchResultActivity extends BaseActivity implements GetFlickrJsonD
 
     private static final String TAG = "SearchResultActivity";
     private PhotoListAdapter photoListAdapter;
+    private RecyclerView recyclerView;
+    private SearchRecentSuggestions searchRecentSuggestions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,25 +29,23 @@ public class SearchResultActivity extends BaseActivity implements GetFlickrJsonD
 
         activateToolbar(true);
 
-        Intent intent = getIntent();
-        String query = "";
-
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            query = intent.getStringExtra(SearchManager.QUERY);
-        }
-
-        RecyclerView recyclerView = findViewById(R.id.photos_recycler_view);
+        recyclerView = findViewById(R.id.photos_recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         photoListAdapter = new PhotoListAdapter(new ArrayList<Photo>());
         recyclerView.setAdapter(photoListAdapter);
         PhotoTouchListener photoTouchListener = new PhotoTouchListener(this, recyclerView, this);
         recyclerView.addOnItemTouchListener(photoTouchListener);
 
-        GetFlickrJsonData getFlickrJsonData = new GetFlickrJsonData(this,
-                "https://api.flickr.com/services/feeds/photos_public.gne",
-                "en-US",
-                true);
-        getFlickrJsonData.execute(query);
+        searchRecentSuggestions = new SearchRecentSuggestions(this,
+                SearchSuggestionProvider.AUTHORITY,
+                SearchSuggestionProvider.MODE);
+
+        executeSearch(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        executeSearch(intent);
     }
 
     @Override
@@ -73,5 +74,23 @@ public class SearchResultActivity extends BaseActivity implements GetFlickrJsonD
         Intent intent = new Intent(this, PhotoDetailActivity.class);
         intent.putExtra(PHOTO_TRANSFER, photoListAdapter.getPhoto(position));
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        recyclerView.requestFocus();
+        super.onResume();
+    }
+
+    private void executeSearch(Intent intent) {
+        if (intent != null && Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            searchRecentSuggestions.saveRecentQuery(query, null);
+            GetFlickrJsonData getFlickrJsonData = new GetFlickrJsonData(this,
+                    "https://api.flickr.com/services/feeds/photos_public.gne",
+                    "en-US",
+                    true);
+            getFlickrJsonData.execute(query);
+        }
     }
 }
