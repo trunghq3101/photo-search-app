@@ -9,6 +9,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="titleDarkTheme">@style/title_dark_theme</item>
+        <item name="headlineDarkTheme">@style/headline_dark_theme</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay"/>
