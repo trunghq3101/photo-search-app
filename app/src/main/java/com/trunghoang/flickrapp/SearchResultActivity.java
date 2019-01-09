@@ -5,22 +5,14 @@ import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
+import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
-public class SearchResultActivity extends BaseActivity implements GetFlickrJsonData.OnDataAvailableListener,
-        PhotoTouchListener.ItemTouchListener {
+public class SearchResultActivity extends BaseActivity {
 
     private static final String TAG = "SearchResultActivity";
-    private PhotoListAdapter photoListAdapter;
-    private RecyclerView recyclerView;
-    private SearchRecentSuggestions searchRecentSuggestions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,19 +20,6 @@ public class SearchResultActivity extends BaseActivity implements GetFlickrJsonD
         setContentView(R.layout.activity_search_result);
 
         activateToolbar(true);
-
-        recyclerView = findViewById(R.id.photos_recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        photoListAdapter = new PhotoListAdapter(new ArrayList<Photo>());
-        recyclerView.setAdapter(photoListAdapter);
-        PhotoTouchListener photoTouchListener = new PhotoTouchListener(this, recyclerView, this);
-        recyclerView.addOnItemTouchListener(photoTouchListener);
-
-        searchRecentSuggestions = new SearchRecentSuggestions(this,
-                SearchSuggestionProvider.AUTHORITY,
-                SearchSuggestionProvider.MODE);
-
-        executeSearch(getIntent());
     }
 
     @Override
@@ -61,36 +40,20 @@ public class SearchResultActivity extends BaseActivity implements GetFlickrJsonD
         return true;
     }
 
-    @Override
-    public void onDataAvailable(ArrayList<Photo> data, DownloadStatus status) {
-        if (status == DownloadStatus.OK) {
-            Log.d(TAG, "onDataAvailable: downloaded");
-            photoListAdapter.updatePhotosData(data);
-        }
-    }
-
-    @Override
-    public void itemSingleTouch(int position) {
-        Intent intent = new Intent(this, PhotoDetailActivity.class);
-        intent.putExtra(PHOTO_TRANSFER, photoListAdapter.getPhoto(position));
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onResume() {
-        recyclerView.requestFocus();
-        super.onResume();
-    }
-
     private void executeSearch(Intent intent) {
         if (intent != null && Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            searchRecentSuggestions.saveRecentQuery(query, null);
-            GetFlickrJsonData getFlickrJsonData = new GetFlickrJsonData(this,
-                    "https://api.flickr.com/services/feeds/photos_public.gne",
-                    "en-US",
-                    true);
-            getFlickrJsonData.execute(query);
+            SearchResultFragment searchResultFragment = new SearchResultFragment();
+            searchResultFragment.setArguments(intent.getExtras());
+
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.search_result_fragment_container, searchResultFragment);
+
+            if (((ViewGroup)findViewById(R.id.search_result_fragment_container)).getChildCount() != 0) {
+                fragmentTransaction.addToBackStack(null);
+            }
+            fragmentTransaction.commit();
         }
     }
+
 }
