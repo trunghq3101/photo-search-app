@@ -1,5 +1,6 @@
 package com.trunghoang.flickrapp;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +19,6 @@ public class MainActivity extends BaseActivity {
 
     public void searchClick(View view) {
         Intent intent = new Intent(this, SearchResultActivity.class);
-        startActivity(intent);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 }

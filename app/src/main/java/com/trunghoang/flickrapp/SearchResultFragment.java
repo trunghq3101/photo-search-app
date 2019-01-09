@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class SearchResultFragment extends Fragment implements PhotoTouchListener
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
         View layout = inflater.inflate(R.layout.search_result_fragment_layout, container, false);
 
         recyclerView = layout.findViewById(R.id.search_result_recycler_view);
@@ -64,6 +66,7 @@ public class SearchResultFragment extends Fragment implements PhotoTouchListener
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onViewStateRestored: ");
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
             query = savedInstanceState.getString(QUERY);
@@ -72,13 +75,18 @@ public class SearchResultFragment extends Fragment implements PhotoTouchListener
 
     @Override
     public void onResume() {
+        Log.d(TAG, "onResume: ");
         recyclerView.requestFocus();
+        restoreQuery();
+        super.onResume();
+    }
+
+    private void restoreQuery() {
         SearchView searchView;
         if (getActivity() != null) {
             searchView = getActivity().findViewById(R.id.action_search);
-            searchView.setQuery(query, false);
+            if (searchView != null) searchView.setQuery(query, false);
         }
-        super.onResume();
     }
 
     @Override

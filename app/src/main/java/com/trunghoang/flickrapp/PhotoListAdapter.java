@@ -2,7 +2,6 @@ package com.trunghoang.flickrapp;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,6 @@ class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.PhotoViewHo
     }
 
     PhotoListAdapter(ArrayList<Photo> photos) {
-        Log.d(TAG, "PhotoListAdapter: created");
         this.photos = photos;
     }
 
@@ -38,7 +36,6 @@ class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.PhotoViewHo
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View layout = layoutInflater.inflate(R.layout.content_item, parent, false);
         PhotoViewHolder viewHolder = new PhotoViewHolder(layout);
-        Log.d(TAG, "onCreateViewHolder: created");
         return viewHolder;
     }
 
