@@ -39,6 +39,9 @@ public class SearchResultActivity extends BaseActivity {
             SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
             searchView.setSearchableInfo(searchableInfo);
             searchView.setIconifiedByDefault(false);
+            if (((ViewGroup)findViewById(R.id.search_result_fragment_container)).getChildCount() == 0) {
+                searchView.requestFocus();
+            }
             restoreQuery(searchView);
         }
         return true;

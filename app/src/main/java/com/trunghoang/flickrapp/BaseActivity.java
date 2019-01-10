@@ -16,6 +16,7 @@ abstract class BaseActivity extends AppCompatActivity {
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(upEnable);
+            actionBar.setDisplayShowTitleEnabled(false);
         }
     }
 }
