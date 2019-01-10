@@ -7,6 +7,5 @@
         android:icon="@android:drawable/ic_menu_search"
         android:title="@string/action_search"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        android:actionLayout="@layout/search_view_layout"
         app:showAsAction="ifRoom" />
 </menu>
