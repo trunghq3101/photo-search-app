@@ -16,7 +16,7 @@
         <item name="android:maxWidth">1000dp</item>
         <item name="queryBackground">@android:color/transparent</item>
         <item name="submitBackground">@android:color/transparent</item>
-        <item name="suggestionRowLayout">@layout/search_suggestion_layout</item>
+        <item name="suggestionRowLayout">@layout/search_suggestion_row_layout</item>
     </style>
     <style name="toolbar_style" parent="Widget.AppCompat.Toolbar">
         <item name="titleMargin">0dp</item>
